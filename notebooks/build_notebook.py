@@ -137,24 +137,22 @@ if IN_COLAB:                                   # copying from Drive to local dis
         if not os.path.exists(f'{SRC}/{f}.csv') or os.path.getsize(f'{SRC}/{f}.csv') != os.path.getsize(f'{DATA_DIR}/{f}.csv'):
             shutil.copy(f'{DATA_DIR}/{f}.csv', f'{SRC}/{f}.csv')
 
-# Try a strict read first; if a file has malformed lines, re-read it skipping them and log how many were dropped.
+# DuckDB's dialect sniffer rejects swap_events.csv (a few malformed rows), so we skip sniffing:
+# read the header with Python, declare every column as text, and skip/log rows that do not parse.
 LOAD_LOG = []
-OPTS = "header=true, all_varchar=true, delim=',', quote='\"', escape='\"'"
 for f in FILES:
     path = f'{SRC}/{f}.csv'
+    with open(path, 'r', encoding='utf-8-sig', errors='replace') as fh:
+        header = [c.strip().strip('"') for c in fh.readline().strip().split(',')]
     with open(path, 'rb') as fh:
         lines = sum(1 for _ in fh) - 1
-    try:
-        con.execute(f"CREATE OR REPLACE TABLE raw_{f} AS SELECT * FROM read_csv('{path}', {OPTS})")
-        mode = 'strict'
-    except Exception as e:
-        print(f'{f}: strict read failed, re-reading and skipping bad lines. Reason: {str(e)[:400]}')
-        con.execute(f"CREATE OR REPLACE TABLE raw_{f} AS SELECT * FROM read_csv('{path}', {OPTS}, "
-                    "ignore_errors=true, null_padding=true, max_line_size=10000000)")
-        mode = 'tolerant'
+    cols = ', '.join(f"'{c}': 'VARCHAR'" for c in header)
+    con.execute(f'''CREATE OR REPLACE TABLE raw_{f} AS SELECT * FROM read_csv('{path}', auto_detect=false, header=true,
+                    delim=',', quote='"', escape='"', columns={{{cols}}}, strict_mode=false, ignore_errors=true,
+                    null_padding=true, max_line_size=10000000)''')
     n = con.execute(f'SELECT COUNT(*) FROM raw_{f}').fetchone()[0]
-    LOAD_LOG.append(dict(file=f, file_lines=lines, rows_loaded=n, rows_dropped=lines - n, mode=mode))
-    print(f'{f:24s} {n:>11,d} rows  (file has {lines:,} lines, {mode} read)')
+    LOAD_LOG.append(dict(file=f, file_lines=lines, rows_loaded=n, rows_dropped=lines - n))
+    print(f'{f:24s} {n:>11,d} rows loaded | {lines:>11,d} lines in file | {lines - n:,} dropped')
 save(pd.DataFrame(LOAD_LOG), 'load_log')
 """)
 
