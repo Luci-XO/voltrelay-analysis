@@ -28,7 +28,3 @@ Root causes found: (1) Gen1 chargers slow down sharply in summer heat, so cabine
 - **Bad battery batch:** Kyron lots KY-2407, KY-2408 and KY-2409 (about 1,460 packs) average 61% state of health, against about 80% for every other lot. 1,438 of them were retired on the same day (2025-06-15) with the label "end_of_life", although they were under a year old.
 - **Hidden battery complaints:** About 9,500 support tickets are filed as "other", but their comments describe weak vehicles or low range.
 - **Dirty data:** Rider cities are written 21 different ways, two test stations appear in the swap and ticket data, and some readings are impossible (negative km, km per charge above 300, SoH above 100%).
-
-## AI disclosure
-
-AI coding assistants were used for code and documentation support; all analysis was run on the organizer dataset and reviewed by the team.
