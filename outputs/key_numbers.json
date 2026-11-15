@@ -1,0 +1,110 @@
+{
+ "swap_rows_raw": 3877013,
+ "swap_rows_clean": 3814897,
+ "peak_hours": [
+  6,
+  7,
+  8,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  19,
+  20,
+  21,
+  22
+ ],
+ "q1_swaps_Q1-2024": 108029.66666666667,
+ "q1_swaps_Q2-2025": 298685.0,
+ "q1_revenue_Q1-2024": 6469139.466665666,
+ "q1_revenue_Q2-2025": 19381249.699996367,
+ "q1_fail_rate_Q1-2024": 0.044080176845954944,
+ "q1_fail_rate_Q2-2025": 0.08302943675902806,
+ "q1_no_battery_rate_Q1-2024": 0.024014413821431158,
+ "q1_no_battery_rate_Q2-2025": 0.050868019978949304,
+ "q1_long_wait_rate_Q1-2024": 0.03380193935034092,
+ "q1_long_wait_rate_Q2-2025": 0.039847074200160995,
+ "q1_p90_wait_min_Q1-2024": 7.227777777777778,
+ "q1_p90_wait_min_Q2-2025": 7.382777777777907,
+ "q1_rev_per_swap_Q1-2024": 59.88387261275117,
+ "q1_rev_per_swap_Q2-2025": 64.8869701632836,
+ "q1_energy_per_swap_Q1-2024": 21.872984482287062,
+ "q1_energy_per_swap_Q2-2025": 17.528346877949556,
+ "q1_opex_per_swap_Q1-2024": 19.576824307522003,
+ "q1_opex_per_swap_Q2-2025": 11.901961045079075,
+ "q1_margin_per_swap_Q1-2024": 18.434063822942118,
+ "q1_margin_per_swap_Q2-2025": 35.456662240254985,
+ "q1_margin_pct_Q1-2024": 0.3078351981937484,
+ "q1_margin_pct_Q2-2025": 0.5464258056351209,
+ "q1_swaps_per_station_day_Q1-2024": 39.58082231285791,
+ "q1_swaps_per_station_day_Q2-2025": 65.79937536583996,
+ "q1_active_stations_Q1-2024": 90.0,
+ "q1_active_stations_Q2-2025": 149.66666666666666,
+ "q2_fail_rate_peak": 0.06085548614161528,
+ "q2_fail_rate_offpeak": 0.05640147094036769,
+ "q3_loss_making_stations_Q2_2025": 0,
+ "q3_stations_Q2_2025": 150,
+ "q3_loss_by_wave": {},
+ "q4_bad_lots": [
+  "KY-2407",
+  "KY-2408",
+  "KY-2409"
+ ],
+ "q4_bad_lot_packs": 1461,
+ "q5_bridge": {
+  "Margin Q1-24": 18.49,
+  "List price": 5.21,
+  "Discounts": -1.93,
+  "Energy cost": 4.35,
+  "Station rent+maint": 7.63,
+  "Surcharge/other": 1.73,
+  "Margin Q2-25": 35.47
+ },
+ "q5_biggest_partner": "ZipDrop",
+ "q5_zipdrop_extra_discount_inr": 3636375.199991076,
+ "q5_zipdrop_swaps_after": 336409,
+ "q5_pilot_cities": [
+  "Pune",
+  "Bengaluru"
+ ],
+ "q6_new_riders": 12740,
+ "q6_churn_rate": 0.19591836734693877,
+ "q6_top_drivers": [
+  {
+   "factor": "Home station has Gen1 chargers",
+   "churn_if_exposed": 0.202,
+   "churn_if_not": 0.189,
+   "excess_churners": 83.523
+  },
+  {
+   "factor": "ZipDrop rider",
+   "churn_if_exposed": 0.199,
+   "churn_if_not": 0.196,
+   "excess_churners": 4.451
+  },
+  {
+   "factor": "Competitor near home station",
+   "churn_if_exposed": 0.205,
+   "churn_if_not": 0.196,
+   "excess_churners": 3.369
+  },
+  {
+   "factor": "Raised a billing ticket",
+   "churn_if_exposed": 0.182,
+   "churn_if_not": 0.196,
+   "excess_churners": -6.407
+  },
+  {
+   "factor": "Ticket left unresolved",
+   "churn_if_exposed": 0.17,
+   "churn_if_not": 0.197,
+   "excess_churners": -10.687
+  }
+ ],
+ "q6_bad_lot_baseline_share": 0.2007505054477479,
+ "errors": [
+  "Q5 margin bridge"
+ ]
+}

@@ -846,7 +846,7 @@ with section('Q5 margin bridge'):
       SELECT period_label, partner_group, COUNT(*) swaps, SUM(discount) discount, AVG(discount) discount_per_swap,
              SUM(discount) / SUM(list_price) discount_rate, COUNT(*) * 1.0 / SUM(COUNT(*)) OVER (PARTITION BY period_label) swap_share,
              SUM(discount) / SUM(COUNT(*)) OVER (PARTITION BY period_label) discount_contribution_per_swap
-      FROM p WHERE period_label IS NOT NULL GROUP BY ALL ORDER BY ALL'''), 'q5_discount_by_partner')
+      FROM p WHERE period_label IS NOT NULL GROUP BY period_label, partner_group ORDER BY 1, 2'''), 'q5_discount_by_partner')
     display(disc.round(3))
 """)
 

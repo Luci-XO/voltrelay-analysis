@@ -1,0 +1,9 @@
+tariff_code,vehicle_class,first_seen,last_seen,n,avg_list,avg_discount,min_hr,max_hr,cities
+OFFPEAK,2W,2024-10-01,2025-06-30,32914,65.0,0.0,0,23,"Pune, Bengaluru"
+OFFPEAK,3W,2024-10-01,2025-06-30,1918,110.0,0.0,0,23,"Pune, Bengaluru"
+PARTNER,2W,2024-01-01,2025-06-30,2061935,64.0,8.5,0,23,"Bengaluru, Delhi NCR, Jaipur, Pune, Hyderabad, Mumbai"
+PARTNER,3W,2024-01-01,2025-06-30,306151,107.9,10.8,0,23,"Mumbai, Pune, Hyderabad, Jaipur, Bengaluru, Delhi NCR"
+PEAK,2W,2024-10-01,2025-06-30,154810,65.0,0.0,6,22,"Bengaluru, Pune"
+PEAK,3W,2024-10-01,2025-06-30,9110,110.0,0.0,6,22,"Bengaluru, Pune"
+STD,2W,2024-01-01,2025-06-30,964709,63.9,0.0,0,23,"Bengaluru, Delhi NCR, Jaipur, Pune, Mumbai, Hyderabad"
+STD,3W,2024-01-01,2025-06-30,55043,107.6,0.0,0,23,"Mumbai, Hyderabad, Pune, Jaipur, Delhi NCR, Bengaluru"

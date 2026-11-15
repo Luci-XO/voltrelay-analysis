@@ -17,7 +17,13 @@ VoltRelay is an EV battery-swapping network for 2W/3W delivery riders in 6 India
 2. Open `notebooks/voltrelay_analysis.ipynb` in Google Colab and choose **Runtime → Run all**.
 3. The last cell downloads `outputs.zip` (all tables, charts, `dq_log.csv` and `key_numbers.json`).
 
-## Early findings from the data audit
+## Results
+
+**Full report: [`reports/REPORT.md`](reports/REPORT.md)** · LinkedIn post: [`reports/LINKEDIN_POST.md`](reports/LINKEDIN_POST.md)
+
+Root causes found: (1) Gen1 chargers slow down sharply in summer heat, so cabinets run out of charged packs; (2) a bad battery batch from the new supplier Kyron; (3) the ZipDrop 28% discount amendment. The station expansion, price rise, firmware and competitor were ruled out.
+
+## Findings from the data audit
 
 - **Bad battery batch:** Kyron lots KY-2407, KY-2408 and KY-2409 (about 1,460 packs) average 61% state of health, against about 80% for every other lot. 1,438 of them were retired on the same day (2025-06-15) with the label "end_of_life", although they were under a year old.
 - **Hidden battery complaints:** About 9,500 support tickets are filed as "other", but their comments describe weak vehicles or low range.

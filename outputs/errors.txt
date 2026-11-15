@@ -1,0 +1,18 @@
+## Q5 margin bridge
+Traceback (most recent call last):
+  File "/tmp/ipykernel_460/2363842254.py", line 53, in section
+    yield
+  File "/tmp/ipykernel_460/2308505283.py", line 28, in <cell line: 0>
+    disc = save(q(f'''
+                ~^^^^^
+      WITH p AS (SELECT *, CASE WHEN month BETWEEN {P0[0]} AND {P0[1]} THEN 'Q1-24' WHEN month BETWEEN {P1[0]} AND {P1[1]} THEN 'Q2-25' END AS period_label
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+             SUM(discount) / SUM(COUNT(*)) OVER (PARTITION BY period_label) discount_contribution_per_swap
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      FROM p WHERE period_label IS NOT NULL GROUP BY ALL ORDER BY ALL'''), 'q5_discount_by_partner')
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_460/2363842254.py", line 40, in q
+    return con.execute(sql).df()
+           ~~~~~~~~~~~^^^^^
+duckdb.duckdb.BinderException: Binder Error: Cannot mix aggregates with non-aggregated columns!
