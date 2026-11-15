@@ -1,0 +1,36 @@
+table,issue,rows,action
+swap_events,Duplicate event_id,0,Keep first
+swap_events,Same rider+station+timestamp+type logged twice (re-sync),21,Drop extra copies
+swap_events,Same rider + same battery pair completed twice,66,Drop extra copies
+swap_events,Unparseable timestamp,0,Drop
+swap_events,Outside Jan 2024 - Jun 2025,0,Drop
+swap_events,Test stations STN-TST-*,62031,Drop (not real customers)
+swap_events,Unknown station / rider id,0,Drop
+swap_events,Negative km since last swap,7814,Set km to NULL
+swap_events,km since last swap > 200 (impossible on one charge),7712,Set km to NULL
+swap_events,Battery SoH > 100%,6069,Cap at 100
+swap_events,Battery SoC > 100%,3698,Cap at 100
+swap_events,Negative / missing queue wait,0,Set to NULL
+swap_events,Completed swap without battery_out,0,Flag only
+swap_events,amount != list price - discount,457706,Keep amount_charged as truth
+swap_events,Money charged on a failed swap,0,Flag only
+riders,"home_city written 15 non-standard ways (BLR, Bombay, Gurgaon, ""bengaluru "", ...)",585,Map to 6 standard cities
+riders,Missing declared_shift,3662,Fill 'unknown'
+riders,Missing age_band,1547,Fill 'unknown'
+riders,"No partner_id (retail riders, not an error)",7628,Label 'RETAIL'
+riders,Only a handful of signups in Dec 2023 (data gap),24,Flag; outside window
+stations,Test stations STN-TST-01/02,2,Exclude everywhere
+stations,Decommissioned station,1,Count costs only while active
+batteries,Retired packs all share one date and say 'end_of_life' although < 1 year old,1438,Treat as a recall; analysed in section 6
+batteries,Commissioned before manufactured,0,Flag
+support_tickets,resolution_status = 'duplicate',937,Drop
+support_tickets,Created outside the analysis window,86,Drop
+support_tickets,Raised at test stations,535,Drop
+support_tickets,"Typos in comments (staion, battry, rnage)",4512,Fix spelling
+support_tickets,'other' tickets that describe weak vehicle / range,9484,Re-tag 'vehicle_performance' (tested in section 6)
+station_hourly_status,Duplicate station-hour rows,0,Keep one
+station_hourly_status,Test stations,26256,Drop
+station_hourly_status,Telemetry not ok,46371,"Keep, flag"
+station_hourly_status,Negative readings,0,Set to NULL
+swap_events,Swap before rider signup date,6,Flag only
+swap_events,Swap before station commission date,24,Flag only
