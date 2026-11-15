@@ -32,8 +32,7 @@ segments that were affected by a change against segments that were not.
 *Runtime → Run all*. All tables and charts are written to `outputs/`, and the last cell zips them as `outputs.zip`.
 A full run takes about 5 to 10 minutes.
 
-**AI disclosure.** AI tools (Kiro) were used to help write code, check data quality and draft documentation.
-The team reviewed every result, and all numbers come from running this notebook on the organizer dataset.
+**AI disclosure.** AI coding assistants were used for code and documentation support; all analysis was run on the organizer dataset and reviewed by the team.
 """)
 
 # ---------------------------------------------------------------- setup

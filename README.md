@@ -31,4 +31,4 @@ Root causes found: (1) Gen1 chargers slow down sharply in summer heat, so cabine
 
 ## AI disclosure
 
-AI tools (Kiro) helped write code, audit data quality and draft documentation. All results come from running the notebook on the organizer dataset, and the team reviewed them.
+AI coding assistants were used for code and documentation support; all analysis was run on the organizer dataset and reviewed by the team.

@@ -176,4 +176,4 @@ Riders whose first-month failure rate was above 10% churn at 28.9%, vs 16.2% for
 
 ## AI disclosure
 
-AI tools (Kiro) helped write the analysis code, check data quality and draft this report. The team ran every query on the organizer dataset in Google Colab and reviewed the results. All numbers come from `outputs/tables/`.
+AI coding assistants were used for code and documentation support; all analysis was run on the organizer dataset and reviewed by the team. All numbers come from `outputs/tables/`.
