@@ -19,7 +19,7 @@ VoltRelay is an EV battery-swapping network for 2W/3W delivery riders in 6 India
 
 ## Results
 
-**Full report: [`reports/REPORT.md`](reports/REPORT.md)** · LinkedIn post: [`reports/LINKEDIN_POST.md`](reports/LINKEDIN_POST.md)
+**Full report: [`reports/REPORT.md`](reports/REPORT.md)** · **Interactive dashboard: [`dashboard/index.html`](dashboard/index.html)** · **Slides: [`slides/VoltRelay_slides.pdf`](slides/VoltRelay_slides.pdf)** · LinkedIn post: [`reports/LINKEDIN_POST.md`](reports/LINKEDIN_POST.md)
 
 Root causes found: (1) Gen1 chargers slow down sharply in summer heat, so cabinets run out of charged packs; (2) a bad battery batch from the new supplier Kyron; (3) the ZipDrop 28% discount amendment. The station expansion, price rise, firmware and competitor were ruled out.
 
