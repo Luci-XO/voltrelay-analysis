@@ -271,13 +271,13 @@ dq('support_tickets', "'other' tickets that describe weak vehicle / range", t.ot
 
 h = q('''SELECT COUNT(*) - COUNT(DISTINCT station_id || '|' || hour_start) dup,
                 COUNT(*) FILTER (WHERE station_id LIKE 'STN-TST-%') test,
-                COUNT(*) FILTER (WHERE telemetry_status <> 'ok') partial,
+                COUNT(*) FILTER (WHERE telemetry_status <> 'ok') AS partial_rows,
                 COUNT(*) FILTER (WHERE TRY_CAST(charged_2w_avg AS DOUBLE) < 0 OR TRY_CAST(avg_charge_minutes AS DOUBLE) < 0) neg
          FROM raw_station_hourly_status''').iloc[0]
 print('telemetry_status values:'); display(q('SELECT telemetry_status, COUNT(*) n FROM raw_station_hourly_status GROUP BY 1'))
 dq('station_hourly_status', 'Duplicate station-hour rows', h.dup, 'Keep one')
 dq('station_hourly_status', 'Test stations', h.test, 'Drop')
-dq('station_hourly_status', 'Telemetry not ok', h.partial, 'Keep, flag')
+dq('station_hourly_status', 'Telemetry not ok', h.partial_rows, 'Keep, flag')
 dq('station_hourly_status', 'Negative readings', h.neg, 'Set to NULL')
 
 dq_log = save(pd.DataFrame(DQ), 'dq_log')
@@ -501,11 +501,11 @@ with section('Q1 monthly trends'):
              AVG(fail_abandon) abandon_rate, AVG(long_wait) long_wait_rate, AVG(queue_wait_sec) / 60 avg_wait_min,
              quantile_cont(queue_wait_sec, 0.9) / 60 p90_wait_min, COUNT(DISTINCT rider_id) active_riders
       FROM swaps GROUP BY 1),
-    months AS (SELECT CAST(m AS DATE) AS month FROM generate_series(TIMESTAMP '2024-01-01', TIMESTAMP '2025-06-01', INTERVAL 1 MONTH) t(m)),
+    cal AS (SELECT CAST(m AS DATE) AS month FROM generate_series(TIMESTAMP '2024-01-01', TIMESTAMP '2025-06-01', INTERVAL 1 MONTH) t(m)),
     opex AS (
-      SELECT months.month, COUNT(*) active_stations, SUM(rent) rent, SUM(maint) maint
-      FROM months JOIN stations st ON st.commissioned_date <= last_day(months.month)
-                                   AND (st.decommissioned_date IS NULL OR st.decommissioned_date >= months.month)
+      SELECT cal.month, COUNT(*) active_stations, SUM(rent) rent, SUM(maint) maint
+      FROM cal JOIN stations st ON st.commissioned_date <= last_day(cal.month)
+                                   AND (st.decommissioned_date IS NULL OR st.decommissioned_date >= cal.month)
       GROUP BY 1)
     SELECT m.*, o.active_stations, o.rent, o.maint,
            revenue / swaps rev_per_swap, list_revenue / swaps list_per_swap, discounts / swaps discount_per_swap,
@@ -633,7 +633,7 @@ with section('Q3 station performance'):
     con.execute(f'''
     CREATE OR REPLACE TABLE station_perf AS
     WITH s AS (
-      SELECT station_id, COUNT(*) attempts, SUM(completed) swaps, COUNT(DISTINCT day) days, SUM(amount) revenue,
+      SELECT station_id, COUNT(*) attempts, SUM(completed) swaps, COUNT(DISTINCT day) AS days, SUM(amount) revenue,
              SUM(energy_cost) energy_cost, AVG(service_fail) fail_rate, AVG(fail_no_battery) no_battery_rate,
              AVG(fail_system) system_fail_rate, AVG(long_wait) long_wait_rate, AVG(queue_wait_sec)/60 avg_wait_min,
              AVG(CASE WHEN sync_mode = 'offline_batch' THEN 1.0 ELSE 0 END) offline_share
@@ -687,7 +687,7 @@ with section('Q3 charger generation, heat and charging speed'):
              AVG(h.packs_quarantined) quarantined, AVG(h.outage_minutes) outage_min
       FROM hourly h JOIN stations st USING (station_id) GROUP BY ALL ORDER BY ALL'''), 'q3_gen_month_hourly')
     ct = save(q('''
-      SELECT st.charger_generation gen, FLOOR(h.cabinet_temp_c / 5) * 5 cabinet_temp_bin, COUNT(*) hours,
+      SELECT st.charger_generation gen, FLOOR(h.cabinet_temp_c / 5) * 5 AS cabinet_temp_bin, COUNT(*) AS hours,
              AVG(h.avg_charge_minutes) avg_charge_min, AVG((h.charged_2w_min = 0)::INT) stockout_share
       FROM hourly h JOIN stations st USING (station_id) WHERE h.cabinet_temp_c IS NOT NULL GROUP BY ALL HAVING COUNT(*) > 200 ORDER BY ALL'''), 'q3_charge_time_vs_temp')
     gh['month'] = pd.to_datetime(gh.month)
