@@ -134,13 +134,28 @@ SRC = DATA_DIR
 if IN_COLAB:                                   # copying from Drive to local disk makes reads much faster
     SRC = '/content/data'; os.makedirs(SRC, exist_ok=True)
     for f in FILES:
-        if not os.path.exists(f'{SRC}/{f}.csv'):
+        if not os.path.exists(f'{SRC}/{f}.csv') or os.path.getsize(f'{SRC}/{f}.csv') != os.path.getsize(f'{DATA_DIR}/{f}.csv'):
             shutil.copy(f'{DATA_DIR}/{f}.csv', f'{SRC}/{f}.csv')
 
+# Try a strict read first; if a file has malformed lines, re-read it skipping them and log how many were dropped.
+LOAD_LOG = []
+OPTS = "header=true, all_varchar=true, delim=',', quote='\"', escape='\"'"
 for f in FILES:
-    con.execute(f"CREATE OR REPLACE TABLE raw_{f} AS SELECT * FROM read_csv('{SRC}/{f}.csv', header=true, all_varchar=true)")
+    path = f'{SRC}/{f}.csv'
+    with open(path, 'rb') as fh:
+        lines = sum(1 for _ in fh) - 1
+    try:
+        con.execute(f"CREATE OR REPLACE TABLE raw_{f} AS SELECT * FROM read_csv('{path}', {OPTS})")
+        mode = 'strict'
+    except Exception as e:
+        print(f'{f}: strict read failed, re-reading and skipping bad lines. Reason: {str(e)[:400]}')
+        con.execute(f"CREATE OR REPLACE TABLE raw_{f} AS SELECT * FROM read_csv('{path}', {OPTS}, "
+                    "ignore_errors=true, null_padding=true, max_line_size=10000000)")
+        mode = 'tolerant'
     n = con.execute(f'SELECT COUNT(*) FROM raw_{f}').fetchone()[0]
-    print(f'{f:24s} {n:>11,d} rows')
+    LOAD_LOG.append(dict(file=f, file_lines=lines, rows_loaded=n, rows_dropped=lines - n, mode=mode))
+    print(f'{f:24s} {n:>11,d} rows  (file has {lines:,} lines, {mode} read)')
+save(pd.DataFrame(LOAD_LOG), 'load_log')
 """)
 
 # ---------------------------------------------------------------- 1. data quality
@@ -154,6 +169,9 @@ code(r"""
 DQ = []
 def dq(table, issue, rows, action):
     DQ.append(dict(table=table, issue=issue, rows=int(rows or 0), action=action))
+for x in LOAD_LOG:
+    if x['rows_dropped'] > 0:
+        dq(x['file'], 'Malformed CSV lines (wrong column count / broken quotes)', x['rows_dropped'], 'Skipped at load')
 
 # ---- swap_events ----
 a = q(f'''
