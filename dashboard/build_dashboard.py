@@ -133,6 +133,7 @@ html = r"""<!doctype html>
 </main>
 <footer>Built from the organizer dataset with Python, DuckDB and Plotly. Source: notebooks/voltrelay_analysis.ipynb · outputs/tables</footer>
 <script>
+(function(){
 const D = __DATA__;
 const C = {blue:'#1f6feb',red:'#cf222e',green:'#2da44e',orange:'#f0883e',purple:'#8250df',grey:'#6e7781'};
 const GEN = {Gen1:C.red, Gen2:C.orange, Gen3:C.green};
@@ -234,11 +235,11 @@ Plotly.newPlot('p-exp', [{x:D.exposure.month.map(m=>String(m).slice(0,10)), y:D.
 // pricing & fleets
 const pnames = [...new Set(D.partners.partner_name)];
 const tot = {}; D.partners.partner_name.forEach((p,i)=>tot[p]=(tot[p]||0)+D.partners.swaps[i]);
-const top = pnames.sort((a,b)=>tot[b]-tot[a]);
+const topP = pnames.sort((a,b)=>tot[b]-tot[a]);
 const sp = document.getElementById('s-part');
-sp.innerHTML = '<option>Top 5</option>' + top.map(p=>`<option>${p}</option>`).join('');
+sp.innerHTML = '<option>Top 5</option>' + topP.map(p=>`<option>${p}</option>`).join('');
 function drawPart(){
-  const pick = sp.value === 'Top 5' ? top.slice(0,5) : [sp.value];
+  const pick = sp.value === 'Top 5' ? topP.slice(0,5) : [sp.value];
   const series = (k) => pick.map(p => { const idx = D.partners.partner_name.map((x,i)=>x===p?i:-1).filter(i=>i>=0);
     return {x: idx.map(i=>String(D.partners.month[i]).slice(0,10)), y: idx.map(i=>D.partners[k][i]), name:p, mode:'lines+markers',
             line:{width: p==='ZipDrop'?4:2}}; });
@@ -258,6 +259,7 @@ Plotly.newPlot('p-coh', [
  {x:D.cohort.cohort.map(m=>String(m).slice(0,10)), y:D.cohort.churn_rate, mode:'lines+markers', line:{color:C.red,width:3}, name:'90-day churn'},
  {x:D.cohort.cohort.map(m=>String(m).slice(0,10)), y:D.cohort.riders, type:'bar', yaxis:'y2', name:'new riders', marker:{color:'#d0d7de'}}],
  L({yaxis:Object.assign({title:'churn'}, pct), yaxis2:{overlaying:'y', side:'right', title:'riders'}}), cfg);
+})();
 </script></body></html>
 """
 os.makedirs('dashboard', exist_ok=True)
