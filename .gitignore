@@ -1,0 +1,7 @@
+# full-size data stays in Google Drive (too big for GitHub)
+swap_events.csv
+station_hourly_status.csv
+*.duckdb
+*.duckdb.wal
+.ipynb_checkpoints/
+__pycache__/
